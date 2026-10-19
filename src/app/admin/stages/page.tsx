@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { createAdminClient } from "@/lib/admin-client";
 import AdminGate from "@/components/AdminGate";
+import Toast, { ToastState, toastFromNote } from "@/components/Toast";
 import { ArrowDown, ArrowUp, Copy, Music, Plus, Save, Trash2 } from "lucide-react";
 import { Stage } from "@/lib/stages";
 import { themes, themeVars, findTheme } from "@/lib/themes";
@@ -10,7 +11,9 @@ export default function StagesAdmin() {
   const api = createAdminClient();
   const [authed, setAuthed] = useState(true);
   const [stages, setStages] = useState<Stage[]>([]);
-  const [note, setNote] = useState("");
+  const [, setNoteRaw] = useState("");
+  const [toast, setToast] = useState<ToastState>(null);
+  const setNote = (m: string) => { setNoteRaw(m); setToast(toastFromNote(m)); };
   const [themeId, setThemeId] = useState("blush");
   useEffect(() => { (async () => {
     const ok = await fetch("/api/admin/login").then(r => r.ok).catch(() => false);
@@ -72,7 +75,7 @@ export default function StagesAdmin() {
   const itemHint: Record<string, string> = { ask: "'Please' messages, one per line (shown each time she clicks No)", balloons: "One balloon message per line (each opens as a popup)", letters: "One letter per line (use \\n for line breaks)" };
   const inp = "mt-1 w-full rounded-xl border border-rose-100 px-3 py-2 font-normal";
   if (!authed) return <AdminGate />;
-  return <main className="min-h-screen bg-[#fffaf7] p-6"><div className="mx-auto max-w-3xl space-y-4">
+  return <main className="min-h-screen bg-[#fffaf7] p-6"><Toast toast={toast} onClose={() => setToast(null)} /><div className="mx-auto max-w-3xl space-y-4">
     <div className="flex items-center justify-between"><h1 className="text-2xl font-black">Edit stages</h1><a href="/admin" className="text-sm font-bold text-berry">← Back to memories</a></div>
     <section className="rounded-3xl border border-rose-100 bg-white p-5 shadow-sm"><b>Theme</b><p className="mb-3 text-xs text-roseink/55">Pick one. It saves instantly and applies to the whole site.</p>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">{themes.map(t => <button key={t.id} onClick={() => pickTheme(t.id)} className={`rounded-2xl border-2 p-3 text-left ${themeId === t.id ? "border-berry" : "border-transparent bg-rose-50"}`} style={{ background: t.blush }}>
@@ -103,6 +106,6 @@ export default function StagesAdmin() {
     </section>)}
     <div className="flex gap-2"><select value={newType} onChange={e => setNewType(e.target.value)} className="flex-1 rounded-xl border border-rose-100 bg-white px-3 py-2">{["ask", "intro", "balloons", "camera", "memories", "letters", "finale"].map(t => <option key={t}>{t}</option>)}</select><button onClick={() => add()} className="flex items-center gap-2 rounded-xl bg-rose-100 px-4 py-2 font-bold text-berry"><Plus size={16} /> Add slide</button></div>
     <button onClick={save} className="flex w-full items-center justify-center gap-2 rounded-xl bg-roseink px-4 py-3 font-bold text-white"><Save size={16} /> Save all stages</button>
-    {note && <p role="status" className="text-sm">{note}</p>}
+    
   </div></main>;
 }
