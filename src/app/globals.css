@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; --roseink: 76 38 56; --berry: 184 78 115; --petal: 247 198 212; --blush: 255 240 244; --cream: 255 250 245; --bg: #fffaf7; --font: ui-sans-serif, system-ui, sans-serif; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: rgb(var(--roseink)); font-family: var(--font); }
+button, input, textarea, select { font: inherit; }
+::selection { background: rgb(var(--petal)); color: rgb(var(--roseink)); }
+.paper-grain { background-image: radial-gradient(rgb(var(--berry) / .075) .7px, transparent .7px); background-size: 12px 12px; }
+.heart-field {
+  background:
+    radial-gradient(ellipse at 12% 18%, rgb(var(--petal) / .8), transparent 35%),
+    radial-gradient(ellipse at 85% 25%, rgb(var(--blush) / .9), transparent 32%),
+    radial-gradient(ellipse at 55% 90%, rgb(var(--petal) / .45), transparent 40%);
+}
+
+/* Small global polish that complements the existing scrapbook theme. */
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button, a, input, textarea, select {
+  -webkit-tap-highlight-color: transparent;
+}
+button:not(:disabled) {
+  transition: transform 160ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+button:not(:disabled):active {
+  transform: scale(.985);
+}
+button:disabled {
+  cursor: not-allowed;
+}
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid rgb(var(--berry) / .72);
+  outline-offset: 3px;
+}
+img {
+  max-width: 100%;
+}
+.text-balance {
+  text-wrap: balance;
+}
+.glass-surface {
+  background: rgb(255 255 255 / .72);
+  border: 1px solid rgb(255 255 255 / .78);
+  box-shadow: 0 16px 48px rgb(var(--roseink) / .08);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
