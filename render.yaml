@@ -1,0 +1,24 @@
+# Render Blueprint: New + -> Blueprint -> pick this repo.
+# Render has no managed MySQL, so point DATABASE_URL at any MySQL 8 / MariaDB host (see README).
+services:
+  - type: web
+    name: bestie-surprise
+    runtime: node
+    plan: free            # upgrade to "starter" to avoid cold starts after idle
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20.18.0
+      - key: DATABASE_URL
+        sync: false         # paste: mysql://USER:PASSWORD@HOST:PORT/DATABASE
+      - key: DB_SSL
+        value: "true"       # set to "false" if your MySQL host does not use TLS
+      - key: SITE_PASSWORD
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SITE_COOKIE_SECRET
+        generateValue: true # Render creates a random secret for you

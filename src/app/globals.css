@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: light; --roseink: 76 38 56; --berry: 184 78 115; --petal: 247 198 212; --blush: 255 240 244; --cream: 255 250 245; --bg: #fffaf7; --font: ui-sans-serif, system-ui, sans-serif; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: rgb(var(--roseink)); font-family: var(--font); }
+button, input, textarea, select { font: inherit; }
+::selection { background: rgb(var(--petal)); color: rgb(var(--roseink)); }
+.paper-grain { background-image: radial-gradient(rgb(var(--berry) / .075) .7px, transparent .7px); background-size: 12px 12px; }
+.heart-field {
+  background:
+    radial-gradient(ellipse at 12% 18%, rgb(var(--petal) / .8), transparent 35%),
+    radial-gradient(ellipse at 85% 25%, rgb(var(--blush) / .9), transparent 32%),
+    radial-gradient(ellipse at 55% 90%, rgb(var(--petal) / .45), transparent 40%);
+}
