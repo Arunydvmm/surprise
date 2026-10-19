@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   let rawBody: Uint8Array;
   try { rawBody = await readBytesLimited(req, 16 * 1024 * 1024); }
   catch { return fail("Upload request is too large or invalid.", 413); }
-  const formRequest = new Request(req.url, { method: "POST", headers: req.headers, body: rawBody });
+  const formRequest = new Request(req.url, { method: "POST", headers: req.headers, body: new Uint8Array(rawBody) });
   const form = await formRequest.formData().catch(() => null);
   if (!form) return fail("Invalid upload.");
   const file = form.get("file"), path = String(form.get("path") || ""), bucket = String(form.get("bucket") || "memory-photos");
