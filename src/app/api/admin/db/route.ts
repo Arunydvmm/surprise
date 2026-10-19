@@ -38,7 +38,7 @@ export async function POST(req: Request) {
   if (!s || typeof s !== "object") return fail("Invalid request.");
 
   let pool;
-  try { pool = await db(); } catch (e) { return fail("Server database is not available. Check DATABASE_URL.", 503); }
+  try { pool = await db(); } catch (e) { console.error("[db] connection failed:", e); return fail("Database error: " + (e instanceof Error ? e.message : String(e)), 503); }
 
   try {
     /* ---------- file operations (photos + music live in the files table) ---------- */
