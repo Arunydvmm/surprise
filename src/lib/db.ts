@@ -20,7 +20,12 @@ function sslOptions(): PoolOptions["ssl"] | undefined {
 function poolConfig(): PoolOptions {
   let host = process.env.DB_HOST, port = Number(process.env.DB_PORT || 3306);
   let user = process.env.DB_USER, password = process.env.DB_PASSWORD, database = process.env.DB_NAME;
-  const raw = process.env.DATABASE_URL;
+  // DATABASE_URL is preferred; Railway's own MySQL variables work as fallbacks.
+  const raw = process.env.DATABASE_URL || process.env.MYSQL_URL;
+  if (!raw && !host && process.env.MYSQLHOST) {
+    host = process.env.MYSQLHOST; port = Number(process.env.MYSQLPORT || 3306);
+    user = process.env.MYSQLUSER; password = process.env.MYSQLPASSWORD; database = process.env.MYSQLDATABASE;
+  }
   if (raw) {
     const u = new URL(raw);
     host = u.hostname; port = Number(u.port || 3306);
@@ -123,7 +128,7 @@ export async function db(): Promise<Pool> {
   return g.__bestiePool;
 }
 
-export const isDbConfigured = () => !!(process.env.DATABASE_URL || (process.env.DB_HOST && process.env.DB_USER && process.env.DB_NAME));
+export const isDbConfigured = () => !!(process.env.DATABASE_URL || process.env.MYSQL_URL || process.env.MYSQLHOST || (process.env.DB_HOST && process.env.DB_USER && process.env.DB_NAME));
 
 /* ------------------------------------------------------------------ */
 /* Row helpers                                                         */
